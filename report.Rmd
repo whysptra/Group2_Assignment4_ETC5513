@@ -30,6 +30,31 @@ header-includes:
 - \pagestyle{fancy}
 ---
 
+```{r setup, include=FALSE, message=FALSE, warning= FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning= FALSE)
+library(readr)
+library(tidyverse)
+library(lubridate)
+```
+
+```{r}
+# read the dataset
+sars <- read_csv("data/sars_2003_complete_dataset_clean.csv") 
+
+# rename the column names with shorter name
+sars <- sars %>% rename(
+  cases = `Cumulative number of case(s)`,
+  death = `Number of deaths`,
+  recovered = `Number recovered`
+)
+
+# rename some countries name 
+sars$Country[sars$Country=="Viet Nam"] <- "Vietnam"
+sars$Country[sars$Country=="Hong Kong SAR, China"] <- "Hong Kong"
+sars$Country[sars$Country=="Macao SAR, China"] <- "Macao"
+sars$Country[sars$Country=="Taiwan, China"] <- "Taiwan"
+```
+
 \clearpage
 
 # Section 1
