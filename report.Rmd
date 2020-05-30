@@ -32,27 +32,31 @@ header-includes:
 
 ```{r setup, include=FALSE, message=FALSE, warning= FALSE}
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning= FALSE)
-library(readr)
-library(tidyverse)
-library(lubridate)
 ```
 
-```{r}
-# read the dataset
-sars <- read_csv("data/sars_2003_complete_dataset_clean.csv") 
+```{r libraries}
+library(tidyverse)
+library(knitr)
+library(readr)
+library(lubridate)
+library(bookdown)
+```
 
-# rename the column names with shorter name
-sars <- sars %>% rename(
-  cases = `Cumulative number of case(s)`,
-  death = `Number of deaths`,
-  recovered = `Number recovered`
-)
+```{r cleaning-data}
+# read data
+storm <- read_csv("data/StormEvents_details-ftp_v1.0_d1971_c20160223.csv")
 
-# rename some countries name 
-sars$Country[sars$Country=="Viet Nam"] <- "Vietnam"
-sars$Country[sars$Country=="Hong Kong SAR, China"] <- "Hong Kong"
-sars$Country[sars$Country=="Macao SAR, China"] <- "Macao"
-sars$Country[sars$Country=="Taiwan, China"] <- "Taiwan"
+# change date format
+storm$BEGIN_DATE_TIME <- dmy_hms(storm$BEGIN_DATE_TIME, tz="America") 
+storm$END_DATE_TIME <- dmy_hms(storm$END_DATE_TIME, tz="America")
+storm$BEGIN_DAY <- mday(storm$BEGIN_DATE_TIME)
+storm$END_DAY <- mday(storm$END_DATE_TIME)
+storm$BEGIN_TIME <- format(as.POSIXct(storm$BEGIN_DATE_TIME) ,format = "%H:%M:%S") 
+storm$END_TIME <- format(as.POSIXct(storm$END_DATE_TIME) ,format = "%H:%M:%S") 
+storm$MONTH_NAME <- month(storm$BEGIN_DATE_TIME, label=TRUE)
+
+#unselect column with NA value; unselect BEGIN MONTH and END MONTH because there are already MONTH column
+storm <- storm %>% select(-BEGIN_YEARMONTH, -END_YEARMONTH, -EPISODE_ID, -WFO, -CZ_TIMEZONE, -SOURCE, -MAGNITUDE_TYPE,-CATEGORY, -FLOOD_CAUSE,-TOR_OTHER_WFO,- TOR_OTHER_CZ_STATE, -TOR_OTHER_CZ_FIPS, - TOR_OTHER_CZ_NAME, - BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_AZIMUTH, -END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE, -DATA_SOURCE) 
 ```
 
 \clearpage
