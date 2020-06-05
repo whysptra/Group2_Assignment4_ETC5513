@@ -30,4 +30,77 @@ header-includes:
 - \pagestyle{fancy}
 ---
 
+```{r setup, include=FALSE, message=FALSE, warning= FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning= FALSE)
+```
 
+```{r libraries}
+library(tidyverse)
+library(knitr)
+library(readr)
+library(lubridate)
+library(bookdown)
+```
+
+```{r cleaning-data}
+# read data
+storm1971 <- read_csv("data/StormEvents_details-ftp_v1.0_d1971_c20160223.csv")
+storm1972 <- read_csv("data/StormEvents_details-ftp_v1.0_d1972_c20181029.csv")
+storm1973 <- read_csv("data/StormEvents_details-ftp_v1.0_d1973_c20160223.csv")
+
+# change date format
+clean <- function(x) {
+x$BEGIN_DATE_TIME <- dmy_hms(x$BEGIN_DATE_TIME, tz="America") 
+x$END_DATE_TIME <- dmy_hms(x$END_DATE_TIME, tz="America")
+x$BEGIN_DAY <- mday(x$BEGIN_DATE_TIME)
+x$END_DAY <- mday(x$END_DATE_TIME)
+x$BEGIN_TIME <- format(as.POSIXct(x$BEGIN_DATE_TIME) ,format = "%H:%M:%S") 
+x$END_TIME <- format(as.POSIXct(x$END_DATE_TIME) ,format = "%H:%M:%S") 
+x$MONTH_NAME <- month(x$BEGIN_DATE_TIME, label=TRUE)
+
+#unselect column with NA value; unselect BEGIN MONTH and END MONTH because there are already MONTH column
+x <- x %>% select(-BEGIN_YEARMONTH, -END_YEARMONTH, -EPISODE_ID, -WFO, -CZ_TIMEZONE, -SOURCE, -MAGNITUDE_TYPE,-CATEGORY, -FLOOD_CAUSE,-TOR_OTHER_WFO,- TOR_OTHER_CZ_STATE, -TOR_OTHER_CZ_FIPS, - TOR_OTHER_CZ_NAME, - BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_AZIMUTH, -END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE, -DATA_SOURCE) 
+}
+
+storm1971 <- clean(storm1971)
+storm1972 <- clean(storm1972)
+storm1973 <- clean(storm1973)
+storm_all <- rbind(storm1971,storm1972,storm1973)
+```
+
+\clearpage
+
+# Section 1
+
+
+\clearpage
+
+# Section 2
+
+
+\clearpage
+
+# Section 3
+
+
+\clearpage
+
+# Section 4 What is the usual time when the event occurs?
+
+```{r}
+storm_all %>%
+  group_by(EVENT_TYPE, MONTH_NAME, YEAR, STATE) %>%
+  tally() %>%
+  ggplot(aes(x=YEAR, y = n, fill=EVENT_TYPE))+
+    geom_col(position = "dodge")
+```
+
+
+\clearpage
+
+# Citation examples
+
+[More styles for natbib here](https://www.overleaf.com/learn/latex/Natbib_bibliography_styles)
+
+
+ @BC64 and this is another article about COVID @bai2020presumed and I can also cite R packages as follows @ggplot2
