@@ -50,8 +50,8 @@ storm1973 <- read_csv("data/StormEvents_details-ftp_v1.0_d1973_c20160223.csv")
 
 # change date format
 clean <- function(x) {
-x$BEGIN_DATE_TIME <- dmy_hms(x$BEGIN_DATE_TIME, tz="America") 
-x$END_DATE_TIME <- dmy_hms(x$END_DATE_TIME, tz="America")
+x$BEGIN_DATE_TIME <- dmy_hms(x$BEGIN_DATE_TIME) 
+x$END_DATE_TIME <- dmy_hms(x$END_DATE_TIME)
 x$BEGIN_DAY <- mday(x$BEGIN_DATE_TIME)
 x$END_DAY <- mday(x$END_DATE_TIME)
 x$BEGIN_TIME <- format(as.POSIXct(x$BEGIN_DATE_TIME) ,format = "%H:%M:%S") 
