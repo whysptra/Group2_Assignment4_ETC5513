@@ -42,11 +42,11 @@ library(lubridate)
 library(bookdown)
 ```
 
-```{r cleaning-data}
+```{r cleaning-data, message=FALSE, warning= FALSE}
 # read data
-storm1971 <- read_csv("data/StormEvents_details-ftp_v1.0_d1971_c20160223.csv")
-storm1972 <- read_csv("data/StormEvents_details-ftp_v1.0_d1972_c20181029.csv")
-storm1973 <- read_csv("data/StormEvents_details-ftp_v1.0_d1973_c20160223.csv")
+storm2017 <- read_csv("data/StormEvents_details-ftp_v1.0_d2017_c20200121.csv")
+storm2018 <- read_csv("data/StormEvents_details-ftp_v1.0_d2018_c20200317.csv")
+storm2019 <- read_csv("data/StormEvents_details-ftp_v1.0_d2019_c20200516.csv")
 
 # change date format
 clean <- function(x) {
@@ -62,10 +62,10 @@ x$MONTH_NAME <- month(x$BEGIN_DATE_TIME, label=TRUE)
 x <- x %>% select(-BEGIN_YEARMONTH, -END_YEARMONTH, -EPISODE_ID, -WFO, -CZ_TIMEZONE, -SOURCE, -MAGNITUDE_TYPE,-CATEGORY, -FLOOD_CAUSE,-TOR_OTHER_WFO,- TOR_OTHER_CZ_STATE, -TOR_OTHER_CZ_FIPS, - TOR_OTHER_CZ_NAME, - BEGIN_AZIMUTH, -BEGIN_LOCATION, -END_AZIMUTH, -END_LOCATION, -EPISODE_NARRATIVE, -EVENT_NARRATIVE, -DATA_SOURCE) 
 }
 
-storm1971 <- clean(storm1971)
-storm1972 <- clean(storm1972)
-storm1973 <- clean(storm1973)
-storm_all <- rbind(storm1971,storm1972,storm1973)
+storm2017 <- clean(storm2017)
+storm2018 <- clean(storm2018)
+storm2019 <- clean(storm2019)
+storm_all <- rbind(storm2017,storm2018,storm2019)
 ```
 
 \clearpage
